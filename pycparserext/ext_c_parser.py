@@ -241,40 +241,41 @@ class _AttributesMixin(object):
 
     # }}}
 
-    @parameterized(('id', 'ID'), ('typeid', 'TYPEID'), ('typeid_noparen', 'TYPEID'))
-    def p_xxx_declarator_2(self, p):
-        """ xxx_declarator  : pointer xxx_declarator attributes_opt
-                            | pointer attributes_opt xxx_declarator
-        """
-        if hasattr(p[3], "exprs"):
-            attr_decl = p[3]
-            decl = p[2]
-        elif hasattr(p[2], "exprs"):
-            attr_decl = p[2]
-            decl = p[3]
-        else:
-            attr_decl = None
-            decl = p[2]
-
-        if not attr_decl.exprs:
-            attr_decl = None
-
-        if attr_decl:
-            if isinstance(decl, c_ast.ArrayDecl):
-                decl.type = to_decl_ext(decl.type)
-                decl.type.attributes = attr_decl
-            elif isinstance(decl, c_ast.FuncDecl):
-                decl.type = to_decl_ext(decl.type)
-                decl.type.attributes = attr_decl
-            elif not isinstance(p[2], c_ast.TypeDecl):
-                raise NotImplementedError(
-                        "cannot attach attributes to nodes of type '%s'"
-                        % type(p[1]))
-            else:
-                decl = to_decl_ext(decl)
-                decl.attributes = attr_decl
-
-        p[0] = self._type_modify_decl(decl, p[1])
+#    @parameterized(('id', 'ID'), ('typeid', 'TYPEID'), ('typeid_noparen', 'TYPEID'))
+#    def p_xxx_declarator_2(self, p):
+#        """ xxx_declarator  : pointer xxx_declarator attributes_opt
+#                            | pointer attributes_opt xxx_declarator
+#        """
+#        if hasattr(p[3], "exprs"):
+#            attr_decl = p[3]
+#            decl = p[2]
+#        elif hasattr(p[2], "exprs"):
+#            attr_decl = p[2]
+#            decl = p[3]
+#        else:
+#            attr_decl = None
+#            decl = p[2]
+#
+#        if not attr_decl.exprs:
+#            attr_decl = None
+#
+#        if attr_decl:
+#            if isinstance(decl, c_ast.ArrayDecl):
+#                decl.type = to_decl_ext(decl.type)
+#                decl.type.attributes = attr_decl
+#            elif isinstance(decl, c_ast.FuncDecl):
+#                decl.type = to_decl_ext(decl.type)
+#                decl.type.attributes = attr_decl
+#            elif not isinstance(p[2], c_ast.TypeDecl):
+#                raise NotImplementedError(
+#                        "cannot attach attributes to nodes of type '%s'"
+#                        % type(p[1]))
+#            else:
+#                decl = to_decl_ext(decl)
+#                decl.attributes = attr_decl
+#
+#        p[0] = self._type_modify_decl(decl, p[1])
+#
 
     def p_function_specifier_attr(self, p):
         """ function_specifier  : attribute_decl
